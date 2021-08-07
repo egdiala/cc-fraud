@@ -16,13 +16,22 @@
         transition="fade"
         overlap
         color="red lighten-1"
-        class="mr-4"
         :content="$store.state.cart.length < 1 ? '0' : $store.state.cart.length"
       >
         <v-btn small icon color="orange darken-3" :ripple="false" to="/cart">
           <v-icon>mdi-cart-outline</v-icon>
         </v-btn>
       </v-badge>
+      <v-divider inset vertical class="mx-4"></v-divider>
+      <v-btn
+        v-if="$store.state.user == null"
+        text
+        plain
+        :ripple="false"
+        to="/login"
+        class="text-capitalize"
+        >Login</v-btn
+      >
       <v-menu
         transition="slide-x-transition"
         offset-y

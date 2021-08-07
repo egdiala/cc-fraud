@@ -43,6 +43,12 @@ const routes = [{
         component: () =>
             import ( /* webpackChunkName: "Products" */ "../views/Cart.vue"),
     },
+    {
+        path: "/process",
+        name: "OtpPage",
+        component: () =>
+            import ( /* webpackChunkName: "Products" */ "../views/OtpPage.vue"),
+    },
 ];
 
 const router = new VueRouter({

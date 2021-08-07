@@ -10,6 +10,7 @@ export default new Vuex.Store({
         count: 0,
         user: null,
         jwt: "",
+        otp: 0,
         cart: [],
     },
     mutations: {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
         },
         ADD_TO_CART(state, item) {
             state.cart.push(item);
+        },
+        SAVE_OTP(state, otp) {
+            state.otp = otp;
         },
         CLEAR_USER_DATA(state) {
             localStorage.clear();

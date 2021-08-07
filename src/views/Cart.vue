@@ -13,7 +13,7 @@
           <v-icon color="blue" left>
             mdi-arrow-left
           </v-icon>
-          Continue shopping
+          Back
         </v-btn>
         <h3 class="mx-auto">Cart summary</h3>
       </v-row>
@@ -51,13 +51,94 @@
             </v-card-text>
           </v-card>
         </v-col>
+        <v-col cols="12">
+          <div class="float-right mr-9">
+            <strong>Total: </strong>
+            <span>${{ totalPrice }}</span>
+          </div>
+        </v-col>
+        <v-col cols="12" lg="4" md="6">
+          <v-btn
+            :loading="loading"
+            color="orange darken-3"
+            depressed
+            tile
+            block
+            @click="sendOtp"
+          >
+            <span class="white--text">Proceed</span>
+          </v-btn>
+        </v-col>
       </v-row>
     </v-container>
+    <v-dialog v-model="dialog" hide-overlay persistent width="300">
+      <v-card color="primary" class="pt-2" dark>
+        <v-card-text>
+          Sending OTP...
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Cart",
+  data() {
+    return {
+      val: "",
+      totalPrice: 0,
+      loading: false,
+      dialog: false,
+    };
+  },
+  methods: {
+    sendOtp() {
+      this.loading = true;
+      this.dialog = true;
+      this.val = Math.floor(1000 + Math.random() * 9000);
+      this.addToCart();
+      axios
+        .post(`${process.env.VUE_APP_API_BASE_URL}/emails`, {
+          email: this.$store.state.user.email,
+          subject: "OTP Validation",
+          custom_html: `<p>Kindly input the otp code: ${this.val}</p>`,
+        })
+        .then((response) => {
+          // Handle success.
+          this.loading = false;
+          this.dialog = false;
+          console.log(response.data);
+          this.$router.push("/process");
+        })
+        .catch((error) => {
+          // Handle error.
+          this.loading = false;
+          this.dialog = false;
+          console.log("An error occurred:", error.response);
+        });
+    },
+    total() {
+      if (this.$store.state.cart[0]) {
+        let items = this.$store.state.cart;
+        for (let i = 0; i < items.length; i++) {
+          this.totalPrice += items[i].price;
+        }
+      }
+    },
+    addToCart() {
+      this.$store.commit("SAVE_OTP", this.val);
+    },
+  },
+  mounted() {
+    this.total();
+  },
 };
 </script>
