@@ -19,21 +19,23 @@
       </v-row>
       <v-row justify="center">
         <v-col cols="12" lg="12" md="10" class="text-center">
-          <div class="input-wrapper ">
+          <div class="input-wrapper">
             <PincodeInput v-model="code" placeholder="0" class="mx-auto" />
           </div>
-          {{ codeRule() }}
         </v-col>
-        <v-col cols="4">
+        <v-col cols="8" lg="3" class="text-center">
           <v-btn
             :loading="loading"
             color="orange darken-3"
+            class="mb-2"
             depressed
             tile
             block
           >
             <span class="white--text">Verify</span>
           </v-btn>
+          Didn't get a code?
+          <strong class="orange--text" @click="sendOtp">Resend</strong>
         </v-col>
       </v-row>
     </v-container>
@@ -42,6 +44,7 @@
 
 <script>
 import PincodeInput from "vue-pincode-input";
+import axios from "axios";
 
 export default {
   name: "OtpPage",
@@ -51,6 +54,7 @@ export default {
   data() {
     return {
       loading: false,
+      val: "",
       code: "",
     };
   },
@@ -61,6 +65,27 @@ export default {
           ? "Match"
           : "Invalid";
       }
+    },
+    sendOtp() {
+      this.val = Math.floor(1000 + Math.random() * 9000);
+      this.saveOtp();
+      axios
+        .post(`${process.env.VUE_APP_API_BASE_URL}/emails`, {
+          email: this.$store.state.user.email,
+          subject: "OTP Validation",
+          custom_html: `<p>Kindly input the otp code: ${this.val}</p>`,
+        })
+        .then((response) => {
+          // Handle success.
+          console.log(response.data);
+        })
+        .catch((error) => {
+          // Handle error.
+          console.log("An error occurred:", error.response);
+        });
+    },
+    saveOtp() {
+      this.$store.commit("SAVE_OTP", this.val);
     },
   },
 };

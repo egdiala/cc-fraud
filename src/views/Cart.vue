@@ -104,7 +104,7 @@ export default {
       this.loading = true;
       this.dialog = true;
       this.val = Math.floor(1000 + Math.random() * 9000);
-      this.addToCart();
+      this.saveOtp();
       axios
         .post(`${process.env.VUE_APP_API_BASE_URL}/emails`, {
           email: this.$store.state.user.email,
@@ -133,7 +133,7 @@ export default {
         }
       }
     },
-    addToCart() {
+    saveOtp() {
       this.$store.commit("SAVE_OTP", this.val);
     },
   },

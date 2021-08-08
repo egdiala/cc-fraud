@@ -18,7 +18,14 @@
         color="red lighten-1"
         :content="$store.state.cart.length < 1 ? '0' : $store.state.cart.length"
       >
-        <v-btn small icon color="orange darken-3" :ripple="false" to="/cart">
+        <v-btn
+          small
+          plain
+          icon
+          color="orange darken-3"
+          :ripple="false"
+          to="/cart"
+        >
           <v-icon>mdi-cart-outline</v-icon>
         </v-btn>
       </v-badge>
@@ -57,6 +64,11 @@
                 $store.state.user.email
               }}</v-list-item-subtitle>
             </v-list-item-content>
+            <v-list-item-action>
+              <v-btn class="ma-2" text icon color="red" @click="logout">
+                <v-icon>mdi-power</v-icon>
+              </v-btn>
+            </v-list-item-action>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -73,6 +85,10 @@ export default {
   data() {
     return {};
   },
-  created() {},
+  methods: {
+    logout() {
+      this.$store.commit("CLEAR_USER_DATA");
+    },
+  },
 };
 </script>
