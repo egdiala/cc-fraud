@@ -131,6 +131,7 @@ export default {
         for (let i = 0; i < items.length; i++) {
           this.totalPrice += items[i].price;
         }
+        this.$store.commit("SAVE_PRICE", this.totalPrice);
       }
     },
     saveOtp() {

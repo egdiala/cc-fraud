@@ -31,6 +31,7 @@
             depressed
             tile
             block
+            @click="verify"
           >
             <span class="white--text">Verify</span>
           </v-btn>
@@ -39,6 +40,18 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="errorModal"
+      transition="dialog-top-transition"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-text class="pa-12">
+          <v-img contain src="@/assets/img/error.gif"></v-img>
+          <div class="text-h4 text-center">{{ msg }}</div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -54,16 +67,33 @@ export default {
   data() {
     return {
       loading: false,
+      errorModal: false,
+      msg: "",
       val: "",
       code: "",
     };
   },
   methods: {
-    codeRule() {
+    async codeRule() {
       if (this.code) {
         return parseInt(this.code) === this.$store.state.otp
           ? "Match"
           : "Invalid";
+      }
+    },
+    async verify() {
+      let valid = await this.codeRule();
+      if (valid == "Invalid") {
+        this.msg = "Invalid Code!!";
+        this.errorModal = true;
+      } else {
+        if (this.$store.state.totalPrice > 100000) {
+          this.msg = "Potential fraud!!";
+          this.errorModal = true;
+        } else {
+          this.errorModal = false;
+          location.href = `https://otakon-api.herokuapp.com/book?name=${this.$store.state.user.username}&email=${this.$store.state.user.email}&amount=${this.$store.state.totalPrice}`;
+        }
       }
     },
     sendOtp() {

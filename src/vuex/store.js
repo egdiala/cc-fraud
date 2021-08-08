@@ -12,6 +12,7 @@ export default new Vuex.Store({
         jwt: "",
         otp: 0,
         cart: [],
+        totalPrice: 0,
     },
     mutations: {
         increment(state) {
@@ -29,9 +30,14 @@ export default new Vuex.Store({
         SAVE_OTP(state, otp) {
             state.otp = otp;
         },
+        SAVE_PRICE(state, totalPrice) {
+            state.totalPrice = totalPrice;
+        },
         CLEAR_USER_DATA(state) {
             localStorage.clear();
             state.user = null;
+            state.jwt = "";
+            state.otp = 0;
             router.push("/login");
         },
     },
