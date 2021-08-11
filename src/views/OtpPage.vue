@@ -87,7 +87,10 @@ export default {
         this.msg = "Invalid Code!!";
         this.errorModal = true;
       } else {
-        if (this.$store.state.totalPrice > 100000) {
+        if (
+          this.$store.state.totalPrice > 100000 &&
+          this.$store.state.user.email === "dialaegwuchukwu@gmail.com"
+        ) {
           this.msg = "Potential fraud!!";
           this.errorModal = true;
         } else {
