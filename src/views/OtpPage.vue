@@ -92,7 +92,7 @@ export default {
           this.errorModal = true;
         } else {
           this.errorModal = false;
-          location.href = `https://otakon-api.herokuapp.com/book?name=${this.$store.state.user.username}&email=${this.$store.state.user.email}&amount=${this.$store.state.totalPrice}`;
+          location.href = `https://diala-api.herokuapp.com/book?name=${this.$store.state.user.username}&email=${this.$store.state.user.email}&amount=${this.$store.state.totalPrice}`;
         }
       }
     },
